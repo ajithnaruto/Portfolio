@@ -1,4 +1,5 @@
 /*jslint browser:true */
+<script>
 $(document).ready(function () {
 	var $body = $("body");
 	var $navbar = $(".navbar-default");
@@ -108,3 +109,4 @@ $(document).ready(function () {
 		$(".modal:visible").each(centerModal);
 	});
 });
+</script>
