@@ -1,12 +1,676 @@
 <!DOCTYPE html>
 <html>
     <head>
-	    <title>Ajit's Portfolio</title>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"></link>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-		<link rel="stylesheet" type="text/css" href="https://gitcdn.link/repo/ajithnaruto/Portfolio/master/style.css">
-		<script src="https://gitcdn.link/repo/ajithnaruto/Portfolio/master/jsscript.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		<script>
+		/*jslint browser:true */
+$(document).ready(function () {
+	var $body = $("body");
+	var $navbar = $(".navbar-default");
+	var $offsetY = $navbar.offset().top + 10;
+	var $menuButton = $("button.navbar-toggle");
+	var $menuIcon = $(".navbar-toggle .glyphicon");
+	var $collapsedMenuItem = $(".navbar-collapse.collapse li");
+	var $modalBackdropDiv = $('<div class="modal-backdrop fade in"></div>');
+	var $scrollButton = $(".scroll");
+	var $socialIcon = $(".social");
+
+	// Fixed Nav after scroll
+	function scroll() {
+		if ($(window).scrollTop() >= $offsetY) {
+			$navbar
+				.addClass("menu-fixed")
+				.css("background-color", "rgba(255,254,253,0.97)");
+		} else {
+			$navbar.removeClass("menu-fixed").css("background-color", "transparent");
+		}
+	}
+	document.onscroll = scroll;
+
+	// Mobile Menu functions
+	function openMenu() {
+		$menuIcon
+			.removeClass("glyphicon-menu-hamburger")
+			.addClass("glyphicon-remove active");
+		$modalBackdropDiv.css("z-index", 900);
+		$body.append($modalBackdropDiv);
+		if (!$navbar.hasClass("menu-fixed")) {
+			$navbar.css("background-color", "rgba(255,254,253,0.97)");
+		}
+		// Close menu after clicking modal-backdrop
+		$modalBackdropDiv.on("click", function () {
+			$(".navbar-toggle").click();
+			closeMenu();
+		});
+	}
+	function closeMenu() {
+		$menuIcon
+			.removeClass("glyphicon-remove active")
+			.addClass("glyphicon-menu-hamburger");
+		$modalBackdropDiv.css("z-index", 1025).remove();
+		if (!$navbar.hasClass("menu-fixed")) {
+			$navbar.css("background-color", "transparent");
+		}
+	}
+	// Mobile Menu Icon Toggle
+	$menuButton.on("click", function () {
+		if ($menuIcon.hasClass("glyphicon-menu-hamburger")) {
+			openMenu();
+			// Close menu after clicking a link
+			$collapsedMenuItem.on("click", function () {
+				$(".navbar-toggle").click(); // Trigger collapse animation
+				closeMenu();
+			});
+		} else {
+			closeMenu();
+		}
+	});
+	// Collapse menu on resize
+	$(window).resize(closeMenu());
+
+	// Smooth scroll to content
+	$scrollButton.on("click", function (e) {
+		e.preventDefault();
+		var $link = $(this).attr("href");
+		$("html, body").animate(
+			{
+				scrollTop: $($link).offset().top - 60
+			},
+			900
+		);
+	});
+
+	// Social icons hover effect
+	$socialIcon.on({
+		"focus mouseenter": function () {
+			var $iconImg = $(this).children();
+			var $href = $iconImg.attr("src").slice(0, -18) + "color.png?raw=true"; // Remove 'black.svg' from end and add 'color.svg'
+			$iconImg.attr("src", $href);
+		},
+		"blur mouseleave": function () {
+			var $iconImg = $(this).children();
+			var $href = $iconImg.attr("src").slice(0, -18) + "black.png?raw=true";
+			$iconImg.attr("src", $href);
+		}
+	});
+
+	// Center modals vertically
+	function centerModal() {
+		$(this).css("display", "block");
+		var $dialog = $(this).find(".modal-dialog");
+		var $offset = ($(window).height() - $dialog.height()) / 2;
+		var $bottomMargin = parseInt($dialog.css("margin-bottom"), 10);
+
+		// If modal is taller than screen height, top margin = bottom margin
+		if ($offset < $bottomMargin) {
+			$offset = $bottomMargin;
+		}
+		$dialog.css("margin-top", $offset);
+	}
+
+	$(document).on("show.bs.modal", ".modal", centerModal);
+	$(window).on("resize", function () {
+		$(".modal:visible").each(centerModal);
+	});
+});
+</script>
+		</script>
+		<style>
+		html { font-size: 110%; }
+html, body {
+  height: 100%; /* Fullscreen BG */
+  width: 100%;
+}
+body {
+  color: #394c4a;
+  font-family: 'Work Sans', helvetica, sans-serif;
+  font-size: 1rem;
+  font-weight: 300;
+  line-height: 1.5;
+}
+h1 {
+  font-family: 'Unica One', cursive;
+  font-size: 3rem;
+}
+h2 {
+  font-family: 'Unica One', cursive;
+  font-size: 2.3rem;
+}
+h3 {
+  font-family: 'Unica One', cursive;
+  font-size: 1.8rem;
+}
+h4 {
+  color: #9da7a6;
+  font-size: 1.1rem;
+  letter-spacing: 1px;
+  line-height: 1.5;
+  text-transform: uppercase;
+}
+small {
+  line-height: 1;
+}
+a {
+  color: #29a598;
+  transition: background-color 0.2s ease-in-out,
+              color 0.2s ease-in-out;
+}
+a:focus,
+a:hover {
+  background-color: #29a598;
+  color: #fffefd;
+}
+hr {
+  border-color: #cdd1cf;
+  margin: 30px 0 60px;
+}
+
+/* =====================
+  Navbar Styles
+===================== */
+.navbar-default {
+  background-color: transparent;
+  border: none;
+  height: 80px;
+  left: 0;
+  margin-bottom: 0;
+  padding: 0 30px;
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 1000;
+}
+.navbar-header {
+  height: 80px;
+}
+.navbar-nav {
+  margin-bottom: 0;
+  margin-top: 0;
+}
+.navbar-brand,
+.navbar-nav > li > a {
+  font-family: 'Unica One', cursive;
+  padding-bottom: 0;
+  padding-top: 0;
+}
+.navbar-brand {
+  font-size: 1.5rem;
+  height: 60px;
+  line-height: 60px;
+  margin-top: 10px;
+  opacity: 0;
+  overflow: hidden;
+  text-transform: uppercase;
+  transition: opacity 0.5s ease-in-out;
+}
+.navbar-brand .logo {
+  margin-right: 15px;
+  margin-top: -12px;
+  max-height: 90px;
+}
+.navbar-brand span {
+  color: #29a598;
+}
+.navbar-nav > li > a,
+.navbar-nav > li > button {
+  color: #6b7a78;
+  height: 36px;
+  line-height: 36px;
+  margin-top: 22px;
+}
+.navbar-default .navbar-nav > .active > a {
+  background-color: transparent;
+  color: #29a598;
+  text-decoration: underline;
+}
+.navbar-default .navbar-nav > li > a:focus,
+.navbar-default .navbar-nav > li > a:hover,
+.navbar-default .navbar-nav > .active > a:focus,
+.navbar-default .navbar-nav > .active > a:hover {
+  background-color: transparent;
+  color: #208479;
+  text-decoration: underline;
+}
+/* Fixed Menu */
+.menu-fixed {
+  background-color: #fffefd;
+  background-color: rgba(255,254,253,0.97);
+  border-radius: 0;
+  box-shadow: 0 3px 9px rgba(8,33,30,0.15);
+  height: 60px;
+  padding-top: 0;
+  position: fixed;
+  transition: background-color 0.5s ease-in-out,
+              box-shadow 0.5s ease-in-out;
+}
+.menu-fixed .navbar-header {
+  height: 60px;
+}
+.menu-fixed .navbar-toggle,
+.menu-fixed .navbar-nav > li > a {
+  margin-top: 13px;
+}
+.menu-fixed .navbar-brand {
+  display: block;
+  margin-top: 0;
+  opacity: 1;
+}
+
+/* =====================
+  Jumbotron Styles
+===================== */
+.jumbotron {
+  background: linear-gradient(rgba(255,254,253,0.9), rgba(255,254,253,0.9)), url("https://github.com/tiffanyadu/portfolio/blob/master/assets/imgs/jumbotron.jpg?raw=true") center center fixed;
+  background-size: cover;
+  height: 100%;
+  margin: 0;
+  min-height: 510px;
+  position: relative;
+  width: 100%;
+}
+.jumbotron .container {
+  position: relative;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+.jumbotron .row {
+  padding-bottom: 45px;
+}
+.jumbotron .logo {
+  max-width: 150px;
+  width: 80%;
+}
+.jumbotron .title {
+  color: #29a598;
+}
+.jumbotron p {
+  margin: 0;
+}
+
+/* =====================
+  Containers
+===================== */
+section.row,
+footer.row {
+  padding: 30px 30px 60px;
+}
+/*** Modal ***/
+.modal-dialog.wide {
+  width: 90%;
+}
+.modal-dialog.wide .row {
+  margin: 0 0 30px;
+}
+.modal-dialog.wide .row .row {
+  margin-left: -15px;
+  margin-right: -15px;
+}
+.modal-header {
+  border: none;
+  padding: 30px 30px 0;
+}
+.modal-header .close {
+  font-size: 2rem;
+}
+.modal-content {
+  background-color: #fffefd;
+  border: none;
+  box-shadow: 0 3px 6px rgba(8,33,30,0.2);
+}
+.modal-body {
+  padding: 30px;
+}
+.modal-body li {
+  margin-bottom: 9px;
+}
+.modal-footer {
+  padding: 30px 0 15px;
+}
+/* Fade Up Animation */
+.modal.fade .modal-dialog {
+  -webkit-transform: translate3d(0, 100vh, 0);
+  -ms-transform: translate3d(0, 100vh, 0);
+  transform: translate3d(0, 100vh, 0);
+}
+.modal.in .modal-dialog {
+  -webkit-transform: translate3d(0, 0, 0);
+  -ms-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
+}
+.modal-backdrop {
+  background-color: #fffefd;
+  z-index: 1025;
+}
+.modal-backdrop.in {
+    opacity: 0.9;
+}
+
+/* =====================
+  Buttons
+===================== */
+.td-btn {
+  padding: 12px 36px;
+  text-transform: uppercase;
+  transition: background-color 0.2s ease-in-out;
+}
+.td-btn + .td-btn {
+  margin-left: 6px;
+}
+.td-btn.small {
+  font-family: 'Work Sans', helvetica, sans-serif;
+  font-size: 0.7rem;
+  padding: 9px 15px 8px;
+}
+.outline {
+  background-color: transparent;
+  border: 1px solid #9da6a4;
+  color: #9da6a4;
+}
+.outline:focus,
+.outline:hover {
+  background-color: #9da6a4;;
+  color: #fffefd;
+}
+.outline.green {
+  border-color: #29a598;
+  color: #29a598;
+}
+.outline.green:focus,
+.outline.green:hover {
+  background-color: #29a598;
+  color: #fffefd;
+}
+.outline.white {
+  border-color: #fffefd;
+  color: #fffefd;
+}
+.outline.white:focus,
+.outline.white:hover {
+  background-color: #fffefd;
+  color: #df3778;
+}
+/* Navbar Contact Button */
+.navbar-nav .outline.pink {
+  border-color: #df3778;
+  color: #df3778;
+  margin: 20px 15px 0;
+  padding-top: 0;
+}
+.navbar-nav .outline.pink:focus,
+.navbar-nav .outline.pink:hover {
+  background-color: #df3778;
+  color: #fffefd;
+  text-decoration: none;
+}
+.menu-fixed .outline.pink {
+  margin-top: 11px;
+}
+/* Codepen and Github SVG Buttons */
+.iconBtn > img {
+  margin-right: 6px;
+  margin-top: -3px;
+  width: 18px;
+}
+.iconBtn:focus > img,
+.iconBtn:hover > img {
+  -webkit-filter: brightness(10);
+  filter: brightness(10);
+}
+
+/* Social Icons */
+.social {
+  display: inline-block;
+  transition: box-shadow 0.2s ease-in-out,
+              transform 0.2s ease-in-out;
+  height: 36px;
+  margin-left: 3px;
+  width: 36px;
+}
+.social:focus,
+.social:hover {
+  background-color: transparent;
+}
+.social + .social {
+  margin-left: 9px;
+}
+.social img {
+  max-width: 100%;
+}
+
+/* =====================
+  Icons and Images
+===================== */
+.icon {
+  max-height: 90px;
+}
+.icon + p { 
+  margin-top: 15px;
+}
+/* Profile Pic */
+.profile {
+  max-width: 180px;
+  padding: 0 15px 0 0;
+}
+/* Glyphicons */
+.glyphicon-heart {
+  color: #df3778;
+}
+
+/* =====================
+  Resume Modal
+===================== */
+#resumeModal h4 {
+  margin-top: 0;
+}
+.year {
+  text-align: right;
+}
+
+/* =====================
+  Portfolio Projects
+===================== */
+#projects .carousel-control {
+  background: none;
+  color: #fffefd;
+  font-size: 2rem;
+  margin-top: 150%;
+  opacity: 1;
+  width: 100%;
+  transition: all 0.2s ease-in-out;
+  text-shadow: none;
+}
+#projects .carousel-control:focus,
+#projects .carousel-control:hover {
+  color: #29a598;
+  -webkit-transform: scale(1.1);
+  -ms-transform: scale(1.1);
+  transform: scale(1.1);
+}
+#projects .carousel-inner {
+  overflow: inherit;
+}
+#projects .carousel-inner img {
+  width: 100%;
+}
+#projects .carousel-caption {
+  bottom: inherit;
+  left: inherit;
+  position: relative;
+  right: inherit;
+  text-align: left;
+  text-shadow: none;
+}
+.card {
+  background-color: #fff;
+  box-shadow: 0 1px 3px rgba(8,33,30,0.5);
+  color: #394c4a;
+  padding: 30px;
+}
+.card h3 {
+  margin-top: 0;
+}
+.card h4 {
+  font-size: 0.8rem;
+}
+#portfolio .carousel-indicators {
+  bottom: 0;
+  position: relative;
+}
+#portfolio .carousel-indicators li {
+  border-radius: 20px;
+  height: 15px;
+  width: 15px;
+}
+#portfolio .carousel-indicators li.active {
+  height: 17px;
+  width: 17px;
+}
+/*** Project Modals ***/
+.hero {
+  margin: 30px auto;
+  max-width: 900px;
+  width: 100%;
+}
+.label.tag {
+    background-color: #ffce3f;
+    border-radius: 0;
+    font-weight: normal;
+}
+/* To override button alignment in modals */
+.center {
+  text-align: center;
+}
+
+/* =====================
+  Other Styles
+===================== */
+.mb-0 {
+  margin-bottom: 0;
+}
+.mb-15 {
+  margin-bottom: 15px!important;
+}
+.mb-30 {
+  margin-bottom: 30px;
+}
+.mb-60 {
+  margin-bottom: 60px;
+}
+.mt-30 {
+  margin-top: 30px;
+}
+.bg-shadow {
+  box-shadow: 0 1px 3px rgba(8,33,30,0.5);
+}
+.bg-white {
+  background-color: #fffefd;
+  position: relative;
+}
+.bg-pink {
+  background-color: #df3778;
+  color: #fffefd;
+  position: relative;
+}
+.bg-star-y {
+  background: #ffce3f url(bg2.jpg) fixed;
+  background-size: 60px;
+  color: #fffefd;
+}
+.bg-star-g {
+  background: #29a598 url(https://github.com/tiffanyadu/portfolio/blob/master/assets/imgs/green-star.png?raw=true) fixed;
+  background-size: 60px;
+  color: #fffefd;
+}
+.bg-honeycomb {
+  background: #fffefd url(bg1.png) fixed;
+  background-size: 24px;
+}
+.gray {
+  color: #9da6a4;
+}
+.dashed {
+  border-top: 2px dashed #ffce3f;
+}
+/*** Contact Form ***/
+.checkbox {
+  display: none;
+}
+
+/* =====================
+  Media Queries
+===================== */
+@media (max-width: 1199px) {
+  /* Center class for medium screens */
+  .md-center { text-align: center; }
+}
+@media (max-width: 991px) {
+  /*** Resume ***/
+  .year {
+    text-align: left;
+  }
+  /*** Portfolio ***/
+  #projects .carousel-control {
+    margin-top: 300%;
+  }
+  #projects .carousel-inner img {
+    max-width: 480px;
+    width: 100%;
+  }
+}
+@media (max-width: 767px) {
+  /*** Page Elements ***/
+  section .row [class^="col-sm-"] + [class^="col-sm-"],
+  section .row [class*=" col-sm-"] + [class*=" col-sm-"] {
+    margin-top: 30px;
+  }
+  /*** Jumbotron ***/
+  .jumbotron .logo {
+    max-width: 120px;
+  }
+  /*** Mobile Nav ***/
+  .navbar-toggle {
+    height: 36px;
+    margin-bottom: 22px;
+    margin-top: 22px;
+  }
+  .navbar-toggle .glyphicon {
+    color: #6b7a78;
+    top: -2px;
+  }
+  .navbar-default .navbar-toggle:focus,
+  .navbar-default .navbar-toggle:hover {
+    background-color: transparent;
+    border-color: #29a598;
+  }
+  .navbar-default .navbar-toggle .active {
+    color: #29a598;
+  }
+  .navbar-collapse {
+    background-color: #fffefd;
+    background-color: rgba(255,254,253,0.97);
+    border: none;
+    box-shadow: 0 2px 8px rgba(8,33,30,0.2);
+    left: 0;
+    position: absolute;
+    right: 0;
+    text-align: center;
+  }
+  .navbar-collapse .outline.pink {
+    margin: 15px auto 30px;
+    max-width: 150px;
+  }
+  /*** Portfolio ***/
+  #projects .carousel-control {
+    margin-top: 300%;
+  }
+  #projects .card {
+    text-align: center;
+  }
+} </style>
     </head>
 <body data-spy="scroll" data-target="#main-nav" data-offset="60">
 	<!-- Fixed Navbar -->
@@ -18,7 +682,7 @@
 					<span class="sr-only">Toggle navigation</span>
 					<span class="glyphicon glyphicon-menu-hamburger"></span>
 				</button>
-				<a class="navbar-brand scroll" href="#top"><img class="pull-left logo" src="https://github.com/tiffanyadu/portfolio/blob/master/assets/imgs/td-logo.png?raw=true" alt="TD Logo"><span>Tiffany Du</span></a>
+				<a class="navbar-brand scroll" href="#top"><img class="pull-left logo" src="logo.PNG" height="70px" width="100px" alt="Aj Logo"></a>
 			</div>
 			<!-- Collapsible Menu -->
 			<div class="collapse navbar-collapse" id="menu">
@@ -36,7 +700,7 @@
 		<div class="container text-center">
 			<div class="row">
 				<div class="col-xs-6 col-xs-offset-3">
-					<img class="img-responsive center-block logo" src="https://github.com/tiffanyadu/portfolio/blob/master/assets/imgs/td-logo.png?raw=true" alt="TD Logo">
+					<img class="img-responsive center-block logo" src="logo.png" alt="TD Logo">
 				</div>
 				<div class="col-xs-12">
 					<h1 class="title">Hi! My name is Ajithkumar.</h1>
@@ -61,38 +725,52 @@
 					<img class="img-responsive center-block profile mb-30" src="https://raw.githubusercontent.com/ajithnaruto/Portfolio/master/ppp-8.jpg" alt="Tiffany Du's Profile Photo">
 				</div>
 				<div class="col-sm-8 col-sm-offset-2 col-md-7 col-md-offset-0 col-lg-6 text-left">
-					<h4>Hello there! I'm a Full stack developer and aspiring engineer based out of chennai.</h4>
-					<p>Having spent a large chunk of my life in art school, I've finally found my passion at the crossroads of design and technology. I started off as an undergrad in industrial design, then worked some graphic design gigs, and later went back to school for web design and new media. The one lesson that stood out throughout this journey was the importance of the end user. Whether a physical or digital product, its purpose needs to be obvious, and the product itself has to be easy to use. So no matter what I'm working on, I always have the user in mind and try my hardest to create an enjoyable experience for them.</p>
-					<p>Currently, I spend most of my time designing websites and marketing material for small businesses and participating in the <a href="https://goo.gl/jhil8F" target="_blank">#100DaysOfCode</a> challenge to keep my skills sharp. When I'm not busy, you can find me obsessing over food, cats, skincare, and video games, or working on one of my many hobbies like playing the ukulele or crocheting. I tend to switch things up every few months, so if you want to know what I'm up to, just <a class="scroll" href="#follow-me">follow me!</a> :)</p>
+					<h4>Hello there! I'm a Full stack developer and aspiring engineer based out of Chennai.</h4>
+					<p>Having spent a large chunk of my life in engineering school with mouse and monitor. Found my passion at the crossroads of full stack development. I started of my career as QA engineer where I had an opportunity to learn testing lifecycle to the core. A year later got chance to work in Dev project, To develop real time applications for Telco domain. Also worked on internal project which gave me chance to work on Restful web services creation and Web UI devlopment with React JS</p>
+					<p>Also, Participated in Smart India Hackathon,<a href="http://blog.kct.ac.in/winners-of-smart-india-hackathon-2019-software-edition-held-at-kct" target="_blank">#SIH(Click me)</a> which is an all India level competition hosted every-year by Central Govt of India. SIH gave me an excellent experience to analyze my skills where I participated with my team of 6 members and got 1st Prize in SIH 2019 by solving a problem statement from DI Patna.</p>
 				</div>
 			</div>
 			<div class="row">
 				<div class="col-sm-10 col-sm-offset-1">
 					<hr class="dashed">
-					<h2 class="mb-60">What I Do</h2>
+					<h2 class="mb-60">What I Know</h2>
 				</div>
 				<div class="col-sm-3 col-lg-2 col-lg-offset-2">
-					<img class="img-responsive center-block icon" src="https://github.com/tiffanyadu/portfolio/blob/master/assets/icons/work/rwd-icon.png?raw=true" alt="Responsive Web Design Icon">
-					<p>Responsive Web Design</p>
+					<img class="img-responsive center-block icon" src="reactjs.jpg" alt="Responsive Web Design Icon">
 				</div>
 				<div class="col-sm-3 col-lg-2">
-					<img class="img-responsive center-block icon" src="https://github.com/tiffanyadu/portfolio/blob/master/assets/icons/work/ui-ux-icon.png?raw=true" alt="UI/UX Design Icon">
-					<p>UI/UX Design</p>
+					<img class="img-responsive center-block icon" src="js.png" alt="UI/UX Design Icon">
 				</div>
 				<div class="col-sm-3 col-lg-2">
-					<img class="img-responsive center-block icon" src="https://github.com/tiffanyadu/portfolio/blob/master/assets/icons/work/dev-icon.png?raw=true" alt="Development Icon">
-					<p>Development</p>
+					<img class="img-responsive center-block icon" src="html.png" alt="Development Icon">
 				</div>
-				<div class="col-sm-3 col-lg-2 mb-30">
-					<img class="img-responsive center-block icon" src="https://github.com/tiffanyadu/portfolio/blob/master/assets/icons/work/star-icon.png?raw=true" alt="Identity and Branding Icon">
-					<p>Identity &amp; Branding</p>
+				<div class="col-sm-3 col-lg-2">
+					<img class="img-responsive center-block icon" src="css3.svg" alt="Development Icon">
+				</div>
+				
+				<br>
+				<br>
+				<div class="col-sm-3 col-lg-2 col-lg-offset-2">
+					<img class="img-responsive center-block icon" src="spring.png" alt="Responsive Web Design Icon">
+				</div>
+				<div class="col-sm-3 col-lg-2">
+					<img class="img-responsive center-block icon" src="groovy.svg" alt="Identity and Branding Icon">
+				</div>
+				<!-- <div class="col-sm-3 col-lg-2">
+					<img class="img-responsive center-block icon" src="js.png" alt="UI/UX Design Icon">
+				</div> -->
+				<div class="col-sm-3 col-lg-2">
+					<img class="img-responsive center-block icon" src="selenium.png" alt="Development Icon">
+				</div>
+				<div class="col-sm-3 col-lg-2">
+					<img class="img-responsive center-block icon" src="python.png" alt="Identity and Branding Icon">
 				</div>
 			</div>
-			<div class="row">
+			<!-- <div class="row">
 				<div class="col-xs-12">
 					<button class="btn td-btn outline green mt-30" data-toggle="modal" data-target="#resumeModal">View my Resume</button>
 				</div>
-			</div>
+			</div> -->
 		</section>
 		<!-- Portfolio Section -->
 		<section id="portfolio" class="row bg-star-y">
@@ -170,13 +848,7 @@
 				</div><!-- /#projects -->
 			</div><!-- /.row -->
 		</section>
-		<!-- Contact Me Section -->
-		<section class="row bg-pink bg-shadow">
-			<div class="col-xs-12">
-				<h1 class="mb-30">Like what you see?</h1>
-				<button class="btn btn-default td-btn outline white" data-toggle="modal" data-target="#contactModal">Send me a message!</button>
-			</div>
-		</section>
+
 		<!-- Footer -->
 		<footer class="row text-left bg-honeycomb">
 			<div class="col-xs-12 col-sm-6">
@@ -220,7 +892,7 @@
 				<h2>&ndash; Thanks for visiting! &ndash;</h2>
 				<small class="gray">Copyright &copy; <script type="text/javascript">
 						document.write(new Date().getFullYear());
-					</script> Tiffany Du &mdash; All Rights Reserved &mdash; Made with <span class="glyphicon glyphicon-heart" aria-hidden="true"></span></small>
+					</script> Ajit &mdash; All Rights Reserved &mdash; Made with <span class="glyphicon glyphicon-heart" aria-hidden="true"></span></small>
 			</div>
 		</footer>
 	</div>
